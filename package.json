@@ -1,0 +1,32 @@
+{
+  "name": "oada-app-cache",
+  "version": "0.1.0",
+  "description": "A javascript wrapper for syncing data between an OADA server and a PouchDb cache.",
+  "main": "cache.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OpenATK/oada-app-cache.git"
+  },
+  "keywords": [
+    "cache",
+    "pouchdb",
+    "oada"
+  ],
+  "author": "Jake Chung jakerev110@gmail.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/OpenATK/oada-app-cache/issues"
+  },
+  "homepage": "https://github.com/OpenATK/oada-app-cache#readme",
+  "dependencies": {
+    "bluebird": "^3.5.0",
+    "json-pointer": "^0.6.0",
+    "lodash": "^4.17.4",
+    "pouchdb": "^6.1.2",
+    "superagent": "^3.5.2",
+    "superagent-promise": "^1.1.0"
+  }
+}

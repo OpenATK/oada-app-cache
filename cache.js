@@ -1,18 +1,17 @@
-import PouchDB from 'pouchdb';
-import { Promise } from 'bluebird';
-import uuid from 'uuid';
-import _ from 'lodash';
+'use strict'
+var Promise = require('bluebird').Promise;
+var uuid = require('uuid');
+var _ = require('lodash');
 var agent = require('superagent-promise')(require('superagent'), Promise);
 var pointer = require('json-pointer');
-import db from '../Cache';
-import tree from '../Cache/tree.js';
+var pouchDbName = '';
 
 var cache = {
   
   get: function(url, token) {
     //get resource id from url
     console.log(url)
-    return db().get(url).then(function(resId) {
+    return db(pouchDbName).get(url).then(function(resId) {
       //get resource
       console.log('!!!url is in pouch!!!')
       console.log(resId)
@@ -44,9 +43,10 @@ var cache = {
 //check if there is a path with keys in each level
 //If a key exists (GET the key), nothing
 //If not, PUT to resources
-
-  setup: function(domain, token) {
-  	var resourcesUrl = 'https://' + domain + '/resources/';
+//TODO: Setup should also take the tree as well as the name of the pouchdb instance.
+// It should set up the pouchdb singleton in set up.
+  setup: function(domain, token, tree, pouchdInstanceName) {
+    var resourcesUrl = 'https://' + domain + '/resources/';
     var bookmarksUrl = 'https://' + domain + '/bookmarks';
     var serverId = { domain: domain, token: token, resourcesUrl: resourcesUrl, bookmarksUrl: bookmarksUrl };
   	var keysArray = [];
@@ -69,7 +69,7 @@ var cache = {
       }).catch(function(err) {
         console.log(err)
       	return err;
-      })
+     })
     }).catch(function(err) {
       //Paste here!!!
       return putSetup(domain, token, bookmarksUrl, data);
