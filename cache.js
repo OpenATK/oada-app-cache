@@ -1,17 +1,32 @@
 'use strict'
+var PouchDB = require('pouchdb');
 var Promise = require('bluebird').Promise;
 var uuid = require('uuid');
 var _ = require('lodash');
 var agent = require('superagent-promise')(require('superagent'), Promise);
 var pointer = require('json-pointer');
 var pouchDbName = '';
+var pouchDbSize = 50;
+
+// documentation:
+// var db = require('oada-app-cache').db
+// db is a function that returns to PouchDB instance
+// used by the cache if you want to share does with it
+
+var pouchSingleton = null;
+
+var db = function() {
+  if (!pouchSingleton) pouchSingleton = new PouchDB(pouchDbName, { size: pouchDbSize });
+  return pouchSingleton;
+}
+module.exports = db;
 
 var cache = {
   
   get: function(url, token) {
     //get resource id from url
     console.log(url)
-    return db(pouchDbName).get(url).then(function(resId) {
+    return db().get(url).then(function(resId) {
       //get resource
       console.log('!!!url is in pouch!!!')
       console.log(resId)
@@ -46,6 +61,7 @@ var cache = {
 //TODO: Setup should also take the tree as well as the name of the pouchdb instance.
 // It should set up the pouchdb singleton in set up.
   setup: function(domain, token, tree, pouchdInstanceName) {
+    pouchDbName = pouchdInstanceName;
     var resourcesUrl = 'https://' + domain + '/resources/';
     var bookmarksUrl = 'https://' + domain + '/bookmarks';
     var serverId = { domain: domain, token: token, resourcesUrl: resourcesUrl, bookmarksUrl: bookmarksUrl };
